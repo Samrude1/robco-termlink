@@ -23,6 +23,8 @@ const ChatWindow: React.FC = () => {
   // Stats State
   const [uptime, setUptime] = useState(0);
   const [powerLevel, setPowerLevel] = useState(99.8);
+  const lastMessageTimeRef = useRef<number>(0);
+  const COOLDOWN_MS = 2000; // 2 second cooldown between messages
 
   // Uptime Timer
   useEffect(() => {
@@ -78,7 +80,16 @@ const ChatWindow: React.FC = () => {
   useEffect(scrollToBottom, [messages]);
 
   const handleSendMessage = useCallback(async (text: string) => {
-    if (!text.trim() || isLoading) return;
+    const now = Date.now();
+    if (now - lastMessageTimeRef.current < COOLDOWN_MS) {
+      setError(`RATE_LIMIT: Please wait ${((COOLDOWN_MS - (now - lastMessageTimeRef.current)) / 1000).toFixed(1)}s before sending another transmission.`);
+      return;
+    }
+
+    if (text.length > 1000) {
+      setError("BUFFER_OVERFLOW: Transmission too large. Please shorten your message (max 1000 chars).");
+      return;
+    }
 
     const userMessage: Message = {
       id: Date.now().toString(),
@@ -87,8 +98,9 @@ const ChatWindow: React.FC = () => {
     };
     setMessages((prev) => [...prev, userMessage]);
     setIsLoading(true);
-    setCurrentMood('CALCULATING'); // Set calculating state while waiting
+    setCurrentMood('CALCULATING'); 
     setError(null);
+    lastMessageTimeRef.current = now;
 
     try {
       if (!chatRef.current) {

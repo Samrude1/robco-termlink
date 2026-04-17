@@ -8,6 +8,7 @@ An immersive, retro-futuristic AI chatbot experience themed after Fallout: New V
 - Fully in-character AI responses as Robert House, CEO of RobCo Industries
 - Dynamic emotional states (NEUTRAL, AMUSED, ANNOYED, CALCULATING)
 - Refined, arrogant, and visionary dialogue
+- **Rate-limiting & Spam protection**: Hardened against automated bot transmissions
 
 ### 🖥️ **Retro-Futuristic UI**
 - **Pip-Boy inspired design** with authentic Fallout aesthetics
@@ -126,3 +127,14 @@ This project is for educational and demonstration purposes.
 - Inspired by Fallout: New Vegas and the character Mr. House
 - CRT effects inspired by retro terminal aesthetics
 - Built with Google's Gemini AI
+
+---
+
+### 🛡️ Security Note
+
+This is a client-side demonstration. The Gemini API key is configured via environment variables. For a production-ready application, it is recommended to:
+1.  **Restrict API Key**: In the Google Cloud Console / AI Studio, restrict your API key to only allow requests from your specific domain (e.g., `mr-house.vercel.app`).
+2.  **Backend Proxy**: Move the AI logic to a server-side function (like Vercel Functions) to keep the API key entirely hidden from the client.
+3.  **Rate Limiting**: This app includes a frontend-level cooldown (2s) to prevent simple bot spam.
+
+*RobCo Industries - Maintaining the future today.*
