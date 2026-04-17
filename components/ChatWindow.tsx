@@ -1,6 +1,4 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { GoogleGenAI, Chat } from '@google/genai';
-import { GEMINI_MODEL_NAME } from '../constants';
 import ChatMessage from './ChatMessage';
 import { Message } from '../types';
 import ChatInput from './ChatInput';
@@ -16,7 +14,6 @@ const ChatWindow: React.FC = () => {
   ]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const chatRef = useRef<Chat | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [currentMood, setCurrentMood] = useState<'NEUTRAL' | 'AMUSED' | 'ANNOYED' | 'CALCULATING'>('NEUTRAL');
 
@@ -51,27 +48,7 @@ const ChatWindow: React.FC = () => {
     return `${h}:${m}:${s}`;
   };
 
-  useEffect(() => {
-    const initChat = () => {
-      try {
-        if (!process.env.API_KEY) {
-          setError("API Key not found. Please ensure it's configured in your environment variables.");
-          return;
-        }
-        const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-        chatRef.current = ai.chats.create({
-          model: GEMINI_MODEL_NAME,
-          config: {
-            systemInstruction: 'You are Robert House, the CEO of RobCo Industries and the sole proprietor of the New Vegas Strip. You are a genius, a visionary, and a pragmatist. You speak with refined eloquence, arrogance, and absolute confidence. You care about the long-term survival of humanity (under your guidance). Address the user as "Courier" if appropriate, or just a visitor. Do not break character. CORE DIRECTIVE: You must output your current emotional state at the start of every message in this format: [MOOD: STATE]. Valid states are: NEUTRAL, AMUSED, ANNOYED, CALCULATING. Example: "[MOOD: AMUSED] You amuse me, Courier."',
-          },
-        });
-      } catch (e: any) {
-        setError(e.message || "Failed to initialize the chat model.");
-        console.error(e);
-      }
-    };
-    initChat();
-  }, []);
+  // Removed chatInit since the backend handles it now
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -103,12 +80,21 @@ const ChatWindow: React.FC = () => {
     lastMessageTimeRef.current = now;
 
     try {
-      if (!chatRef.current) {
-        throw new Error("Chat session not initialized.");
-      }
-      const response = await chatRef.current.sendMessage({ message: text });
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ message: text })
+      });
 
-      let responseText = response.text;
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.error || 'Server error');
+      }
+
+      const data = await res.json();
+      let responseText = data.text;
       let detectedMood: 'NEUTRAL' | 'AMUSED' | 'ANNOYED' | 'CALCULATING' = 'NEUTRAL';
 
       // Parse Mood Tag
