@@ -1,0 +1,377 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --pip-green: #1aff1a;
+  --pip-green-dim: #00b300;
+  --pip-bg: #0a0a0a;
+}
+
+body {
+  font-family: 'Share Tech Mono', monospace;
+  background-color: var(--pip-bg);
+  color: var(--pip-green);
+  overflow: hidden;
+  /* Prevent body scroll, handle in app */
+}
+
+/* CRT Container Effects */
+body::after {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: radial-gradient(circle, rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 100%),
+    linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%);
+  background-size: 100% 2px, 3px 100%;
+  pointer-events: none;
+  z-index: 100;
+  box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.9);
+  /* Heavy Vignette */
+  animation: static-noise 0.5s infinite steps(2);
+}
+
+/* Static Noise (bad connection) */
+@keyframes static-noise {
+
+  0%,
+  95% {
+    opacity: 1;
+    background-image: radial-gradient(circle, rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 100%),
+      linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%);
+  }
+
+  96% {
+    opacity: 0.95;
+    background-image: radial-gradient(circle, rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 100%),
+      linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%),
+      repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255, 255, 255, 0.03) 2px, rgba(255, 255, 255, 0.03) 4px);
+  }
+
+  98% {
+    opacity: 1;
+    background-image: radial-gradient(circle, rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 100%),
+      linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%);
+  }
+}
+
+/* Screen Flicker */
+@keyframes flicker {
+  0% {
+    opacity: 0.97;
+  }
+
+  5% {
+    opacity: 0.95;
+  }
+
+  10% {
+    opacity: 0.9;
+  }
+
+  15% {
+    opacity: 0.95;
+  }
+
+  20% {
+    opacity: 0.99;
+  }
+
+  25% {
+    opacity: 0.95;
+  }
+
+  30% {
+    opacity: 0.9;
+  }
+
+  35% {
+    opacity: 0.96;
+  }
+
+  40% {
+    opacity: 0.98;
+  }
+
+  45% {
+    opacity: 0.95;
+  }
+
+  50% {
+    opacity: 0.99;
+  }
+
+  55% {
+    opacity: 0.93;
+  }
+
+  60% {
+    opacity: 0.9;
+  }
+
+  65% {
+    opacity: 0.96;
+  }
+
+  70% {
+    opacity: 1;
+  }
+
+  75% {
+    opacity: 0.97;
+  }
+
+  80% {
+    opacity: 0.95;
+  }
+
+  85% {
+    opacity: 0.92;
+  }
+
+  90% {
+    opacity: 0.97;
+  }
+
+  95% {
+    opacity: 0.99;
+  }
+
+  100% {
+    opacity: 0.94;
+  }
+}
+
+/* Random Brightness Spike (like old monitors warming up) */
+@keyframes brightness-spike {
+
+  0%,
+  94% {
+    filter: brightness(1);
+  }
+
+  95% {
+    filter: brightness(1.08);
+  }
+
+  96% {
+    filter: brightness(0.96);
+  }
+
+  97% {
+    filter: brightness(1.05);
+  }
+
+  100% {
+    filter: brightness(1);
+  }
+}
+
+/* Horizontal Sync Issue (rolling bars) */
+@keyframes hsync-glitch {
+
+  0%,
+  85% {
+    transform: translateX(0) skewX(0deg);
+  }
+
+  86% {
+    transform: translateX(-3px) skewX(0.5deg);
+  }
+
+  87% {
+    transform: translateX(2px) skewX(-0.3deg);
+  }
+
+  88% {
+    transform: translateX(-1px) skewX(0.2deg);
+  }
+
+  89%,
+  100% {
+    transform: translateX(0) skewX(0deg);
+  }
+}
+
+/* Screen Geometry Distortion (CRT curvature issues) */
+@keyframes screen-warp {
+
+  0%,
+  70% {
+    transform: scale(1, 1);
+  }
+
+  72% {
+    transform: scale(1.002, 0.998);
+  }
+
+  74% {
+    transform: scale(0.998, 1.002);
+  }
+
+  76%,
+  100% {
+    transform: scale(1, 1);
+  }
+}
+
+/* Color Bleeding / RGB Separation */
+@keyframes rgb-shift {
+
+  0%,
+  80% {
+    text-shadow:
+      2px 0 1px rgba(255, 0, 0, 0.3),
+      -2px 0 1px rgba(0, 0, 255, 0.3),
+      0 0 5px var(--pip-green),
+      0 0 15px var(--pip-green-dim);
+  }
+
+  82% {
+    text-shadow:
+      4px 0 2px rgba(255, 0, 0, 0.6),
+      -4px 0 2px rgba(0, 0, 255, 0.6),
+      0 0 8px var(--pip-green),
+      0 0 20px var(--pip-green-dim);
+  }
+
+  84% {
+    text-shadow:
+      1px 0 1px rgba(255, 0, 0, 0.2),
+      -1px 0 1px rgba(0, 0, 255, 0.2),
+      0 0 3px var(--pip-green),
+      0 0 10px var(--pip-green-dim);
+  }
+
+  86%,
+  100% {
+    text-shadow:
+      2px 0 1px rgba(255, 0, 0, 0.3),
+      -2px 0 1px rgba(0, 0, 255, 0.3),
+      0 0 5px var(--pip-green),
+      0 0 15px var(--pip-green-dim);
+  }
+}
+
+/* Vertical Hold Issue (image jumping) */
+@keyframes vertical-hold {
+
+  0%,
+  92% {
+    transform: translateY(0);
+  }
+
+  93% {
+    transform: translateY(2px);
+  }
+
+  94% {
+    transform: translateY(-1px);
+  }
+
+  95%,
+  100% {
+    transform: translateY(0);
+  }
+}
+
+body {
+  animation:
+    flicker 0.15s infinite,
+    brightness-spike 23s infinite,
+    screen-warp 13s infinite,
+    vertical-hold 19s infinite;
+}
+
+/* Moving Scanline Bar */
+@keyframes scanline {
+  0% {
+    transform: translateY(-100%);
+  }
+
+  100% {
+    transform: translateY(100vh);
+  }
+}
+
+/* CRT Scanline Effect (Static + Moving) */
+.scanlines {
+  background: linear-gradient(to bottom,
+      rgba(255, 255, 255, 0),
+      rgba(255, 255, 255, 0) 50%,
+      rgba(0, 0, 0, 0.5) 50%,
+      rgba(0, 0, 0, 0.5));
+  background-size: 100% 4px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 50;
+}
+
+.scanlines::before {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 50%, rgba(0, 0, 0, 0.1) 50%);
+  background-size: 100% 2px;
+  pointer-events: none;
+}
+
+/* Rolling bar */
+.scanlines::after {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%),
+    linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+  background-size: 100% 2px, 3px 100%;
+  animation:
+    scanline 8s linear infinite,
+    hsync-glitch 17s infinite;
+  pointer-events: none;
+  opacity: 0.3;
+}
+
+/* Phosphor Glow + Chromatic Aberration */
+.text-bloom {
+  animation: rgb-shift 7s infinite;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 12px;
+  background: #001100;
+  border-left: 1px solid var(--pip-green);
+}
+
+::-webkit-scrollbar-track {
+  background: #001100;
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--pip-green);
+  border: 1px solid #000;
+  box-shadow: 0 0 5px var(--pip-green);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #ffffff;
+  /* Brighten on hover like active UI element */
+  box-shadow: 0 0 10px #ffffff;
+}
