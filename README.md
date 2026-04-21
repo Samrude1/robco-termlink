@@ -36,6 +36,9 @@ An immersive, retro-futuristic AI chatbot experience themed after Fallout: New V
 
 ![Mr. House UI Preview](./house.png)
 
+*Rumor has it you might find me hidden in the footer of [samirautanen.fi](https://samirautanen.fi)...*
+
+
 ## 🚀 Getting Started
 
 ### Prerequisites
